@@ -1,16 +1,33 @@
 # traduction_aprentissage_langues
 
-A new Flutter project.
+Description courte de votre projet.
 
-## Getting Started
+## Table des Matières
+- [Aperçu](#aperçu)
+- [Fonctionnalités](#fonctionnalités)
+- [Captures d'écran](#captures-décran)
+- [Installation](#installation)
+- [Utilisation](#utilisation)
+- [Contribuer](#contribuer)
+- [Licence](#licence)
 
-This project is a starting point for a Flutter application.
+## Aperçu
 
-A few resources to get you started if this is your first Flutter project:
+Donnez un aperçu du projet, son objectif principal et pourquoi il est unique.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Fonctionnalités
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Listez les fonctionnalités clés de votre application.
+
+## Captures d'écran
+
+Insérez des captures d'écran pour donner aux utilisateurs une idée visuelle de votre application.
+
+## Installation
+
+Expliquez comment installer les dépendances et obtenir le projet en cours d'exécution.
+
+```bash
+# Exemple de commandes d'installation
+flutter pub get
+flutter run
