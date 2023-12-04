@@ -1,5 +1,42 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:traduction_aprentissage_langues/screens/courses_screen.dart';
+import 'package:http/http.dart' as http;
+
+class Translator {
+  final http.Client client;
+
+  Translator(this.client);
+
+  Future<String> translate(String text, String sourceLang, String targetLang) async {
+    final result = <String>[];
+    final url = Uri.parse(
+      'https://translate.googleapis.com/translate_a/single?client=gtx&sl=$sourceLang&tl=$targetLang&dt=t&q=${Uri.encodeQueryComponent(text)}',
+    );
+
+    final response = await client.get(url);
+
+    if (response.statusCode != 200) {
+      throw Exception('Translation failed');
+    }
+
+    final List<dynamic> data = jsonDecode(response.body);
+
+    if (data.isNotEmpty) {
+      final List<dynamic> translations = data[0];
+
+      for (final dynamic slice in translations) {
+        for (final dynamic translatedText in slice) {
+          result.add('$translatedText');
+          break;
+        }
+      }
+
+      return result.join('');
+    } else {
+      throw Exception('Translation not found');
+    }
+  }
+}
 
 class TraductionScreen extends StatefulWidget {
   @override
@@ -8,9 +45,29 @@ class TraductionScreen extends StatefulWidget {
 
 class _TraductionScreenState extends State<TraductionScreen> {
   TextEditingController _textEditingController = TextEditingController();
-  String _selectedInputLanguage = 'Anglais';
-  String _selectedOutputLanguage = 'Français';
+  String _selectedInputLanguage = 'en';
+  String _selectedOutputLanguage = 'fr';
   String _result = '';
+
+  final Translator _translator = Translator(http.Client());
+
+  Future<void> _translateText() async {
+    String textToTranslate = _textEditingController.text;
+
+    try {
+      String translatedText = await _translator.translate(
+        textToTranslate,
+        _selectedInputLanguage,
+        _selectedOutputLanguage,
+      );
+
+      setState(() {
+        _result = translatedText;
+      });
+    } catch (e) {
+      print('Translation failed. Error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +98,7 @@ class _TraductionScreenState extends State<TraductionScreen> {
                         _selectedInputLanguage = newValue!;
                       });
                     },
-                    items: ['Anglais', 'Français', 'Arabe'] 
+                    items: ['en', 'fr', 'ar']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -51,7 +108,7 @@ class _TraductionScreenState extends State<TraductionScreen> {
                   ),
                 ),
                 SizedBox(width: 16.0),
-                Icon(Icons.compare_arrows, size: 32.0), 
+                Icon(Icons.compare_arrows, size: 32.0),
                 SizedBox(width: 16.0),
                 Expanded(
                   child: DropdownButton<String>(
@@ -61,7 +118,7 @@ class _TraductionScreenState extends State<TraductionScreen> {
                         _selectedOutputLanguage = newValue!;
                       });
                     },
-                    items: ['Anglais', 'Français', 'Arabe'] 
+                    items: ['en', 'fr', 'ar']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -73,9 +130,7 @@ class _TraductionScreenState extends State<TraductionScreen> {
                 SizedBox(width: 16.0),
                 IconButton(
                   icon: Icon(Icons.translate),
-                  onPressed: () {
- 
-                  },
+                  onPressed: _translateText,
                 ),
               ],
             ),
