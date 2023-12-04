@@ -39,7 +39,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
         ),
         onPressed: () {
           sessionManager.toggleFavorite(language);
-          setState(() {}); // Update the UI
+          setState(() {});
         },
       ),
       onTap: () {

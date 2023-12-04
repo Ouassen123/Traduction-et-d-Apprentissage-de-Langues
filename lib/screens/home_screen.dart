@@ -12,8 +12,7 @@ class HomeScreen extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
-                'assets/LanguageLearning.png'), // Correct path to your image
+            image: AssetImage('assets/LanguageLearning.png'),
             fit: BoxFit.cover,
           ),
         ),

@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:traduction_aprentissage_langues/screens/home_screen.dart';
 import 'package:traduction_aprentissage_langues/screens/profil_screen.dart';
 import 'package:traduction_aprentissage_langues/screens/favori_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:traduction_aprentissage_langues/firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MyApp());
 }
 

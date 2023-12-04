@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "905947356572",
+    "project_id": "traductionapprentissagelangues",
+    "storage_bucket": "traductionapprentissagelangues.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905947356572:android:3f7ffdc07096b9fd1dbc59",
+        "android_client_info": {
+          "package_name": "com.example.traduction_aprentissage_langues"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_izkYtlzc6TzkQOb8g9RP3lqbq_BGCEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905947356572:android:f0ecddfac50c63501dbc59",
+        "android_client_info": {
+          "package_name": "com.projet2024"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_izkYtlzc6TzkQOb8g9RP3lqbq_BGCEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

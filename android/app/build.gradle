@@ -23,6 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
+    apply plugin: 'com.google.gms.google-services'
     namespace "com.example.traduction_aprentissage_langues"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
@@ -64,4 +65,18 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+  // ...
+
+    // Import the Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:32.6.0')
+
+    // Add the dependencies for Firebase products you want to use
+    // For example, if you're using Firebase Authentication, add:
+    implementation 'com.google.firebase:firebase-auth'
+
+    // Add other Firebase dependencies as needed
+
+    // When using the BoM, don't specify versions in Firebase dependencies
+    // https://firebase.google.com/docs/android/setup#available-libraries
+}
