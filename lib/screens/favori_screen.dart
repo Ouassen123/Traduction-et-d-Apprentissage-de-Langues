@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:traduction_aprentissage_langues/screens/session_manager.dart';
+import 'package:traduction_aprentissage_langues/screens/courses_screen.dart';
 
 class FavoriScreen extends StatefulWidget {
   @override
@@ -20,7 +21,20 @@ class _FavoriScreenState extends State<FavoriScreen> {
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(sessionManager.favoriteLanguages[index]),
-            // Add other details if needed
+            onTap: () {
+              // Perform additional actions or treatments when tapping on a favorite language
+              String selectedLanguage = sessionManager.favoriteLanguages[index];
+              // Add your logic here
+
+              // For example, you can navigate to a specific screen for the selected language
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      CoursesScreen(language: selectedLanguage),
+                ),
+              );
+            },
           );
         },
       ),
