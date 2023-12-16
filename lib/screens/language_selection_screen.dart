@@ -21,7 +21,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
         children: [
           buildLanguageTile('Anglais'),
           buildLanguageTile('Arabe'),
-          buildLanguageTile('Francais'),
+          buildLanguageTile('french'),
           // Add other languages with trailing icons as needed
         ],
       ),
