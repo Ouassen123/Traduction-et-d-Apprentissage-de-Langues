@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart'; // Import url_launcher
 import 'package:traduction_aprentissage_langues/screens/YoutubePlayerScreen.dart';
 import 'package:traduction_aprentissage_langues/screens/PDFViewerScreen.dart';
 
@@ -54,16 +55,7 @@ class CoursesScreen extends StatelessWidget {
                           ElevatedButton(
                             onPressed: () {
                               if (lesson['pdf_link'] != null) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PdfViewerScreen(
-                                      pdfLink: lesson['pdf_link'] ?? '',
-                                      lessonDescription:
-                                          lesson['description'] ?? '',
-                                    ),
-                                  ),
-                                );
+                                _launchPDF(lesson['pdf_link'] ?? '');
                               }
                             },
                             child: Text('Ouvrir PDF'),
@@ -93,15 +85,7 @@ class CoursesScreen extends StatelessWidget {
                       ),
                       onTap: () {
                         if (lesson['pdf_link'] != null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PdfViewerScreen(
-                                pdfLink: lesson['pdf_link'] ?? '',
-                                lessonDescription: lesson['description'] ?? '',
-                              ),
-                            ),
-                          );
+                          _launchPDF(lesson['pdf_link'] ?? '');
                         } else if (lesson['youtube_link'] != null) {
                           Navigator.push(
                             context,
@@ -133,5 +117,14 @@ class CoursesScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  // Function to launch PDF with url_launcher
+  void _launchPDF(String pdfLink) async {
+    if (await canLaunch(pdfLink)) {
+      await launch(pdfLink);
+    } else {
+      throw 'Could not launch $pdfLink';
+    }
   }
 }
