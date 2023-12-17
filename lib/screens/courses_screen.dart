@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
-import 'package:traduction_aprentissage_langues/screens/LessonScreen.dart';
+import 'package:traduction_aprentissage_langues/screens/YoutubePlayerScreen.dart';
 import 'package:traduction_aprentissage_langues/screens/PDFViewerScreen.dart';
 
 class CoursesScreen extends StatelessWidget {
@@ -33,112 +31,107 @@ class CoursesScreen extends StatelessWidget {
                 snapshot.data!.data() as Map<String, dynamic>;
             List<dynamic> lessons = data['lessons'];
 
-            return ListView.builder(
-              itemCount: lessons.length,
-              itemBuilder: (context, index) {
-                Map<String, dynamic> lesson = lessons[index];
-                return Card(
-                  elevation: 2, // Ajustez l'élévation selon vos préférences
-                  margin: EdgeInsets.all(
-                      8), // Ajustez la marge selon vos préférences
-                  child: ListTile(
-                    title: Text(lesson['title'] ?? ''),
-                    subtitle: Text(lesson['content'] ?? ''),
-                    onTap: () {
-                      if (lesson['pdf_link'] != null) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PDFViewerScreen(
-                              pdfLink: lesson['pdf_link'],
-                            ),
+            return SingleChildScrollView(
+              child: Column(
+                children: lessons.map((lesson) {
+                  return Card(
+                    elevation: 2,
+                    margin: EdgeInsets.all(8),
+                    child: ListTile(
+                      title: Text(lesson['title'] ?? ''),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Description: ${lesson['content'] ?? ''}'),
+                          Text('Niveau d\'écoute: ${lesson['level'] ?? ''}'),
+                          Text(
+                              'Titre de la leçon: ${lesson['lesson_title'] ?? ''}'),
+                        ],
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              if (lesson['pdf_link'] != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PdfViewerScreen(
+                                      pdfLink: lesson['pdf_link'] ?? '',
+                                      lessonDescription:
+                                          lesson['description'] ?? '',
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            child: Text('Ouvrir PDF'),
                           ),
-                        );
-                      } else if (lesson['youtube_link'] != null) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => YoutubePlayerScreen(
-                              youtubeLink: lesson['youtube_link'],
-                            ),
+                          SizedBox(width: 8),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (lesson['youtube_link'] != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => YoutubePlayerScreen(
+                                      youtubeLink: lesson['youtube_link'] ?? '',
+                                      lessonDescription:
+                                          lesson['description'] ?? '',
+                                      lessonTitle: lesson['lesson_title'] ?? '',
+                                      courseText: lesson['courseText'] ??
+                                          '', // Update with the correct key
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            child: Text('Voir Vidéo'),
                           ),
-                        );
-                      }
-                    },
-                  ),
-                );
-              },
+                        ],
+                      ),
+                      onTap: () {
+                        if (lesson['pdf_link'] != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PdfViewerScreen(
+                                pdfLink: lesson['pdf_link'] ?? '',
+                                lessonDescription: lesson['description'] ?? '',
+                              ),
+                            ),
+                          );
+                        } else if (lesson['youtube_link'] != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => YoutubePlayerScreen(
+                                youtubeLink: lesson['youtube_link'] ?? '',
+                                lessonDescription: lesson['description'] ?? '',
+                                lessonTitle: lesson['lesson_title'] ?? '',
+                                courseText: lesson['courseText'] ??
+                                    '', // Update with the correct key
+                              ),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  'Aucun lien disponible pour cette leçon.'),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  );
+                }).toList(),
+              ),
             );
           }
         },
       ),
     );
-  }
-}
-
-class YoutubePlayerScreen extends StatefulWidget {
-  final String youtubeLink;
-
-  YoutubePlayerScreen({required this.youtubeLink});
-
-  @override
-  _YoutubePlayerScreenState createState() => _YoutubePlayerScreenState();
-}
-
-class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
-  late YoutubePlayerController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = YoutubePlayerController(
-      initialVideoId: YoutubePlayer.convertUrlToId(widget.youtubeLink) ?? '',
-      flags: YoutubePlayerFlags(
-        autoPlay: true,
-        mute: false,
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Youtube Player'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          YoutubePlayer(
-            controller: _controller,
-            showVideoProgressIndicator: true,
-            progressIndicatorColor: Colors.blueAccent,
-            progressColors: ProgressBarColors(
-              playedColor: Colors.blueAccent,
-              handleColor: Colors.blueAccent,
-            ),
-          ),
-          SizedBox(height: 16),
-          Text(
-            'Description:',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'Description de la leçon ici...',
-            style: TextStyle(fontSize: 16),
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
   }
 }
