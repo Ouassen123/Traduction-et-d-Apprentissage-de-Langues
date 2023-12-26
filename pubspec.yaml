@@ -37,10 +37,11 @@ dependencies:
   webview_flutter: ^2.0.15
   webview_windows: ^0.3.0
   flutter_web_browser: ^0.17.1
+  firebase_ui_auth: ^1.10.0
   
   flutter:
     sdk: flutter
-  http: ^0.13.3
+  http: 1.1.2
 
 
 
