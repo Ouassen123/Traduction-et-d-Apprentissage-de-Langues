@@ -38,6 +38,7 @@ dependencies:
   webview_windows: ^0.3.0
   flutter_web_browser: ^0.17.1
   firebase_ui_auth: ^1.10.0
+  syncfusion_flutter_charts: ^24.1.43
   
   flutter:
     sdk: flutter

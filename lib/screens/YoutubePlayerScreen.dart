@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:traduction_aprentissage_langues/test/page_test.dart'; // Assurez-vous d'importer correctement votre fichier TestPage
 
 class YoutubePlayerScreen extends StatefulWidget {
   final String youtubeLink;
@@ -20,14 +21,17 @@ class YoutubePlayerScreen extends StatefulWidget {
 
 class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
   int likes = 0;
+  bool isLiked = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Youtube Player'),
+        backgroundColor: Colors.red,
       ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -52,10 +56,18 @@ class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  icon: Icon(Icons.thumb_up),
+                  icon: Icon(
+                    Icons.thumb_up,
+                    color: isLiked ? Colors.red : Colors.black,
+                  ),
                   onPressed: () {
                     setState(() {
-                      likes++;
+                      if (!isLiked) {
+                        likes++;
+                      } else {
+                        likes--;
+                      }
+                      isLiked = !isLiked;
                     });
                   },
                 ),
@@ -77,65 +89,89 @@ class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
               ],
             ),
             SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Titre de la leçon: ${widget.lessonTitle}',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Titre de la leçon: ${widget.lessonTitle}',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Contenu Continu de la leçon:',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Contenu Continu de la leçon:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
-                  SizedBox(height: 8),
-                  Card(
-                    elevation: 4,
-                    margin: EdgeInsets.all(8),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Le verbe:',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                ),
+                SizedBox(height: 16),
+                Card(
+                  elevation: 4,
+                  margin: EdgeInsets.all(8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Le verbe:',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
                           ),
-                          SizedBox(height: 8),
-                          Text(
-                            widget.courseText ?? 'No course text available',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ],
-                      ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          widget.courseText ?? 'No course text available',
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Contenu Continu de la leçon:',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Contenu Continu de la leçon:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
-                  SizedBox(height: 8),
-                  Text(
-                    widget.courseText ?? 'No course text available',
-                    style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  widget.courseText ?? 'No course text available',
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+
+            // Nouveau bouton de test
+            ElevatedButton(
+              onPressed: () {
+                // Naviguer vers la page de test
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TestPage(),
                   ),
-                ],
+                );
+              },
+              child: Text(
+                'Tester le cours',
+                style: TextStyle(
+                  color: Colors.black, // Couleur du texte
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: const Color.fromARGB(255, 149, 33, 243),
               ),
             ),
           ],
