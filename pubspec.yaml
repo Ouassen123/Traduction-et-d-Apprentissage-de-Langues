@@ -39,6 +39,8 @@ dependencies:
   flutter_web_browser: ^0.17.1
   firebase_ui_auth: ^1.10.0
   syncfusion_flutter_charts: ^24.1.43
+  rxdart: ^0.27.3
+  flutter_speed_dial: ^7.0.0
   
   flutter:
     sdk: flutter
