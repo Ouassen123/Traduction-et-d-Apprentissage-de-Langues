@@ -135,20 +135,6 @@ class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
-                Text(
-                  'Contenu Continu de la leçon:',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(height: 16),
-                Text(
-                  widget.courseText ?? 'No course text available',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
               ],
             ),
             SizedBox(height: 16),

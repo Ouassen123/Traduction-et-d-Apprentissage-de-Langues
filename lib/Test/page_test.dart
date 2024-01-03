@@ -43,50 +43,61 @@ class _TestPageState extends State<TestPage> {
   }
 
   Widget buildQuiz(Map<String, dynamic> quiz) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          quiz['title'] ?? 'No Title',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+    return Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            quiz['title'] ?? 'No Title',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue,
+            ),
           ),
-        ),
-        SizedBox(height: 16),
-        for (var questionKey
-            in (quiz['questions'] as Map<String, dynamic>).keys)
-          buildQuestion(
-            quiz['questions'][questionKey],
+          SizedBox(height: 16),
+          for (var questionKey
+              in (quiz['questions'] as Map<String, dynamic>).keys)
+            buildQuestion(quiz['questions'][questionKey]),
+          SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              showResultDialog();
+            },
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+              primary: Colors.green,
+            ),
+            child: Text('Valider', style: TextStyle(fontSize: 18)),
           ),
-        SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: () {
-            showResultDialog();
-          },
-          style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-            primary: Colors.green,
-          ),
-          child: Text('Valider', style: TextStyle(fontSize: 18)),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Widget buildQuestion(Map<String, dynamic> questionData) {
     question = questionData;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          question['questionText'] ?? 'No Question Text',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+        Container(
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(10),
           ),
-          textAlign: TextAlign.center,
+          child: Text(
+            question['questionText'] ?? 'No Question Text',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+            textAlign: TextAlign.center,
+          ),
         ),
+        SizedBox(height: 16),
         for (var option in (question['options'] as List<dynamic>))
           buildOption(option, question['correctAnswerIndex']),
         SizedBox(height: 16),
@@ -95,15 +106,18 @@ class _TestPageState extends State<TestPage> {
   }
 
   Widget buildOption(String option, int correctAnswerIndex) {
-    return ElevatedButton(
-      onPressed: () {
-        handleOptionSelection(option, correctAnswerIndex);
-      },
-      style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.all(16),
-        primary: Colors.blue,
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8),
+      child: ElevatedButton(
+        onPressed: () {
+          handleOptionSelection(option, correctAnswerIndex);
+        },
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.all(16),
+          primary: Colors.blue,
+        ),
+        child: Text(option, style: TextStyle(fontSize: 16)),
       ),
-      child: Text(option, style: TextStyle(fontSize: 16)),
     );
   }
 
