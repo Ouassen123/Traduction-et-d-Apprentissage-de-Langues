@@ -153,11 +153,16 @@ class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
               child: Text(
                 'Tester le cours',
                 style: TextStyle(
-                  color: Colors.black, // Couleur du texte
+                  color: Colors.white, // Couleur du texte
                 ),
               ),
               style: ElevatedButton.styleFrom(
                 primary: const Color.fromARGB(255, 149, 33, 243),
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                textStyle: TextStyle(fontSize: 18),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
             ),
           ],

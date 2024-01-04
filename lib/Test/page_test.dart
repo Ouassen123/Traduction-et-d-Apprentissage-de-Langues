@@ -11,6 +11,8 @@ class _TestPageState extends State<TestPage> {
   late Future<Map<String, dynamic>> quizData;
   int userScore = 0;
   late Map<String, dynamic> question;
+  Map<String, Set<int>> selectedOptions = {};
+  Color resultColor = Colors.red;
 
   @override
   void initState() {
@@ -45,39 +47,45 @@ class _TestPageState extends State<TestPage> {
   Widget buildQuiz(Map<String, dynamic> quiz) {
     return Padding(
       padding: EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            quiz['title'] ?? 'No Title',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.blue,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              quiz['title'] ?? 'No Title',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
             ),
-          ),
-          SizedBox(height: 16),
-          for (var questionKey
-              in (quiz['questions'] as Map<String, dynamic>).keys)
-            buildQuestion(quiz['questions'][questionKey]),
-          SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
-              showResultDialog();
-            },
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-              primary: Colors.green,
+            SizedBox(height: 16),
+            for (var questionKey
+                in (quiz['questions'] as Map<String, dynamic>).keys)
+              buildQuestion(quiz['questions'][questionKey], questionKey),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                showResultDialog(quiz);
+              },
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                primary: const Color.fromARGB(255, 145, 33, 243),
+              ),
+              child: Text('Valider', style: TextStyle(fontSize: 18)),
             ),
-            child: Text('Valider', style: TextStyle(fontSize: 18)),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget buildQuestion(Map<String, dynamic> questionData) {
+  Widget buildQuestion(Map<String, dynamic> questionData, String questionKey) {
     question = questionData;
+    if (!selectedOptions.containsKey(questionKey)) {
+      selectedOptions[questionKey] = {};
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -98,42 +106,59 @@ class _TestPageState extends State<TestPage> {
           ),
         ),
         SizedBox(height: 16),
-        for (var option in (question['options'] as List<dynamic>))
-          buildOption(option, question['correctAnswerIndex']),
+        for (var optionIndex = 0;
+            optionIndex < (question['options'] as List<dynamic>).length;
+            optionIndex++)
+          buildOption(
+            (question['options'] as List<dynamic>)[optionIndex],
+            question['correctAnswerIndex'],
+            questionKey,
+            optionIndex,
+          ),
         SizedBox(height: 16),
       ],
     );
   }
 
-  Widget buildOption(String option, int correctAnswerIndex) {
+  Widget buildOption(String option, int correctAnswerIndex, String questionKey,
+      int optionIndex) {
+    bool isOptionSelected = selectedOptions[questionKey]!.contains(optionIndex);
+    bool isCorrectAnswer = optionIndex == correctAnswerIndex;
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8),
       child: ElevatedButton(
-        onPressed: () {
-          handleOptionSelection(option, correctAnswerIndex);
-        },
+        onPressed: isOptionSelected
+            ? null
+            : () {
+                handleOptionSelection(
+                    optionIndex, questionKey, correctAnswerIndex);
+              },
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.all(16),
-          primary: Colors.blue,
+          primary: isOptionSelected
+              ? isCorrectAnswer
+                  ? Colors.green
+                  : Colors.red
+              : Colors.blue,
         ),
         child: Text(option, style: TextStyle(fontSize: 16)),
       ),
     );
   }
 
-  Widget buildCircularChart(int score) {
+  Widget buildCircularChart(int correctPercentage, int incorrectPercentage) {
     return SfCircularChart(
-      title: ChartTitle(text: '$score%'),
+      title: ChartTitle(text: '$correctPercentage%'),
       series: <CircularSeries>[
         DoughnutSeries<int, String>(
-          dataSource: <int>[score, 100 - score],
-          xValueMapper: (int data, _) =>
-              '1', // Use a constant x-value as a String
+          dataSource: <int>[correctPercentage, incorrectPercentage],
+          xValueMapper: (int data, _) => '1',
           yValueMapper: (int data, _) => data,
           pointColorMapper: (int data, _) {
-            return data == score ? Colors.green : Colors.red;
+            return data == correctPercentage ? Colors.green : Colors.red;
           },
-          innerRadius: '60%', // Adjust the inner radius as needed
+          innerRadius: '60%',
           explode: true,
           explodeIndex: 0,
           dataLabelSettings: DataLabelSettings(isVisible: false),
@@ -142,7 +167,14 @@ class _TestPageState extends State<TestPage> {
     );
   }
 
-  void showResultDialog() {
+  void showResultDialog(Map<String, dynamic> quiz) {
+    int totalQuestions = quiz['questions'].length;
+    int correctPercentage =
+        ((userScore / (totalQuestions * 50) / 2 * 100).toInt()).clamp(0, 100);
+    int incorrectPercentage = 100 - correctPercentage;
+
+    Color chartColor = correctPercentage == 100 ? Colors.green : Colors.red;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -157,7 +189,7 @@ class _TestPageState extends State<TestPage> {
                 ),
               ),
               SizedBox(height: 16),
-              buildCircularChart(userScore),
+              buildCircularChart(correctPercentage, incorrectPercentage),
             ],
           ),
           actions: [
@@ -165,7 +197,7 @@ class _TestPageState extends State<TestPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              style: ElevatedButton.styleFrom(primary: Colors.green),
+              style: ElevatedButton.styleFrom(primary: Colors.blue),
               child: Text('OK'),
             ),
           ],
@@ -193,12 +225,23 @@ class _TestPageState extends State<TestPage> {
     }
   }
 
-  void handleOptionSelection(String option, int correctAnswerIndex) {
-    print('Selected: $option');
-    if (option == (question['options'] as List<dynamic>)[correctAnswerIndex]) {
-      setState(() {
-        userScore += 10;
-      });
-    }
+  void handleOptionSelection(
+      int optionIndex, String questionKey, int correctAnswerIndex) {
+    print('Selected option index: $optionIndex');
+    setState(() {
+      selectedOptions[questionKey]!.clear();
+      selectedOptions[questionKey]!.add(optionIndex);
+
+      if (optionIndex == correctAnswerIndex) {
+        userScore += 50;
+        resultColor = Colors.green;
+      } else {
+        resultColor = Colors.red;
+      }
+
+      if (userScore > 100) {
+        userScore = 100;
+      }
+    });
   }
 }
