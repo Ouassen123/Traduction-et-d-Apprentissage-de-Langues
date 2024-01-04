@@ -13,8 +13,7 @@ class CoursesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Cours de $language'),
-        backgroundColor: const Color.fromARGB(
-            255, 149, 33, 243), // Couleur de fond de la barre d'applications
+        backgroundColor: const Color.fromARGB(255, 149, 33, 243),
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: FirebaseFirestore.instance
@@ -42,14 +41,24 @@ class CoursesScreen extends StatelessWidget {
                   elevation: 4,
                   margin: EdgeInsets.all(8),
                   child: ListTile(
-                    title: Text(lesson['title'] ?? ''),
+                    title: Text(
+                      lesson['title'] ?? '',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Description: ${lesson['content'] ?? ''}'),
                         Text('Niveau d\'écoute: ${lesson['level'] ?? ''}'),
                         Text(
-                            'Titre de la leçon: ${lesson['lesson_title'] ?? ''}'),
+                          'Titre de la leçon: ${lesson['lesson_title'] ?? ''}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ],
                     ),
                     trailing: Row(
@@ -78,8 +87,7 @@ class CoursesScreen extends StatelessWidget {
                                     lessonDescription:
                                         lesson['description'] ?? '',
                                     lessonTitle: lesson['lesson_title'] ?? '',
-                                    courseText: lesson['courseText'] ??
-                                        '', // Update with the correct key
+                                    courseText: lesson['courseText'] ?? '',
                                   ),
                                 ),
                               );
@@ -103,8 +111,7 @@ class CoursesScreen extends StatelessWidget {
                               youtubeLink: lesson['youtube_link'] ?? '',
                               lessonDescription: lesson['description'] ?? '',
                               lessonTitle: lesson['lesson_title'] ?? '',
-                              courseText: lesson['courseText'] ??
-                                  '', // Update with the correct key
+                              courseText: lesson['courseText'] ?? '',
                             ),
                           ),
                         );
@@ -127,7 +134,7 @@ class CoursesScreen extends StatelessWidget {
     );
   }
 
-  // Function to launch PDF with url_launcher
+  // Fonction pour ouvrir le PDF avec url_launcher
   void _launchPDF(String pdfLink) async {
     if (await canLaunch(pdfLink)) {
       await launch(pdfLink);

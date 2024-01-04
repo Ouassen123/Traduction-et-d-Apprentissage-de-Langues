@@ -11,7 +11,6 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Full-page background image
           Image.asset(
             'assets/LanguageLearning.png',
             fit: BoxFit.cover,
@@ -75,13 +74,6 @@ class _MainScreenState extends State<MainScreen> {
       appBar: AppBar(
         title: Text('Language Learning App'),
         actions: [
-          // Display user profile information in the AppBar
-
-          SizedBox(width: 10),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-          ),
           SizedBox(width: 10),
           IconButton(
             icon: Icon(Icons.menu),
@@ -115,12 +107,16 @@ class _MainScreenState extends State<MainScreen> {
           ),
           // Add more items as needed
         ],
+        selectedItemColor: Colors.purple,
+        unselectedItemColor: Colors.grey,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
       ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            // Custom DrawerHeader with user information
             UserAccountsDrawerHeader(
               accountName: Text(
                 FirebaseAuth.instance.currentUser?.displayName ?? '',
@@ -136,36 +132,41 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
             ListTile(
-              title: Text('Accueil'),
+              title: Text(
+                'Accueil',
+                style: TextStyle(fontSize: 16),
+              ),
               onTap: () {
                 Navigator.pop(context);
-                print("Navigating to Accueil");
                 setState(() {
                   _currentIndex = 0;
                 });
               },
             ),
             ListTile(
-              title: Text('Profil'),
+              title: Text(
+                'Profil',
+                style: TextStyle(fontSize: 16),
+              ),
               onTap: () {
                 Navigator.pop(context);
-                print("Navigating to Profil");
                 setState(() {
                   _currentIndex = 1;
                 });
               },
             ),
             ListTile(
-              title: Text('Favori'),
+              title: Text(
+                'Favori',
+                style: TextStyle(fontSize: 16),
+              ),
               onTap: () {
                 Navigator.pop(context);
-                print("Navigating to Favori");
                 setState(() {
                   _currentIndex = 2;
                 });
               },
             ),
-            // Add more drawer items as needed
           ],
         ),
       ),
