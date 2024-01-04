@@ -40,90 +40,82 @@ class CoursesScreen extends StatelessWidget {
                 return Card(
                   elevation: 4,
                   margin: EdgeInsets.all(8),
-                  child: ListTile(
-                    title: Text(
-                      lesson['title'] ?? '',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Description: ${lesson['content'] ?? ''}'),
-                        Text('Niveau d\'écoute: ${lesson['level'] ?? ''}'),
-                        Text(
-                          'Titre de la leçon: ${lesson['lesson_title'] ?? ''}',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        title: Text(
+                          lesson['title'] ?? '',
                           style: TextStyle(
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            if (lesson['pdf_link'] != null) {
-                              _launchPDF(lesson['pdf_link'] ?? '');
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.green,
-                          ),
-                          child: Text('Ouvrir PDF'),
-                        ),
-                        SizedBox(width: 8),
-                        ElevatedButton(
-                          onPressed: () {
-                            if (lesson['youtube_link'] != null) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => YoutubePlayerScreen(
-                                    youtubeLink: lesson['youtube_link'] ?? '',
-                                    lessonDescription:
-                                        lesson['description'] ?? '',
-                                    lessonTitle: lesson['lesson_title'] ?? '',
-                                    courseText: lesson['courseText'] ?? '',
-                                  ),
-                                ),
-                              );
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.orange,
-                          ),
-                          child: Text('Voir Vidéo'),
-                        ),
-                      ],
-                    ),
-                    onTap: () {
-                      if (lesson['pdf_link'] != null) {
-                        _launchPDF(lesson['pdf_link'] ?? '');
-                      } else if (lesson['youtube_link'] != null) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => YoutubePlayerScreen(
-                              youtubeLink: lesson['youtube_link'] ?? '',
-                              lessonDescription: lesson['description'] ?? '',
-                              lessonTitle: lesson['lesson_title'] ?? '',
-                              courseText: lesson['courseText'] ?? '',
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Description: ${lesson['content'] ?? ''}',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
+                            Text(
+                              'Niveau d\'écoute: ${lesson['level'] ?? ''}',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              'Titre de la leçon: ${lesson['lesson_title'] ?? ''}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              if (lesson['pdf_link'] != null) {
+                                _launchPDF(lesson['pdf_link'] ?? '');
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.green,
+                            ),
+                            child: Text('Ouvrir PDF'),
                           ),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content:
-                                Text('Aucun lien disponible pour cette leçon.'),
+                          SizedBox(width: 8),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (lesson['youtube_link'] != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => YoutubePlayerScreen(
+                                      youtubeLink: lesson['youtube_link'] ?? '',
+                                      lessonDescription:
+                                          lesson['description'] ?? '',
+                                      lessonTitle: lesson['title'] ?? '',
+                                      courseText: lesson['courseText'] ?? '',
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.orange,
+                            ),
+                            child: Text('Voir Vidéo'),
                           ),
-                        );
-                      }
-                    },
+                        ],
+                      ),
+                    ],
                   ),
                 );
               },

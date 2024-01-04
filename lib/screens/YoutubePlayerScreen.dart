@@ -119,7 +119,7 @@ class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Le verbe:',
+                          widget.lessonTitle ?? 'No course text available',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
