@@ -7,7 +7,8 @@ class Translator {
 
   Translator(this.client);
 
-  Future<String> translate(String text, String sourceLang, String targetLang) async {
+  Future<String> translate(
+      String text, String sourceLang, String targetLang) async {
     final result = <String>[];
     final url = Uri.parse(
       'https://translate.googleapis.com/translate_a/single?client=gtx&sl=$sourceLang&tl=$targetLang&dt=t&q=${Uri.encodeQueryComponent(text)}',
@@ -84,6 +85,7 @@ class _TraductionScreenState extends State<TraductionScreen> {
               controller: _textEditingController,
               decoration: InputDecoration(
                 labelText: 'Saisissez le texte',
+                border: OutlineInputBorder(),
               ),
             ),
             SizedBox(height: 16.0),
@@ -128,16 +130,22 @@ class _TraductionScreenState extends State<TraductionScreen> {
                   ),
                 ),
                 SizedBox(width: 16.0),
-                IconButton(
-                  icon: Icon(Icons.translate),
+                ElevatedButton(
                   onPressed: _translateText,
+                  child: Icon(Icons.translate),
                 ),
               ],
             ),
             SizedBox(height: 16.0),
-            Text(
-              'Résultat : $_result',
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            Card(
+              elevation: 4.0,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Résultat : $_result',
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
           ],
         ),

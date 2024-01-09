@@ -4,6 +4,8 @@ import 'package:traduction_aprentissage_langues/screens/language_selection_scree
 import 'package:traduction_aprentissage_langues/screens/traduction_screen.dart';
 import 'package:traduction_aprentissage_langues/screens/profil_screen.dart';
 import 'package:traduction_aprentissage_langues/screens/favori_screen.dart';
+import 'package:traduction_aprentissage_langues/screens/chat/chat.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -65,23 +67,32 @@ class _MainScreenState extends State<MainScreen> {
     HomeScreen(),
     ProfilScreen(),
     FavoriScreen(),
-    // Add other screens as needed
   ];
+
+  final List<String> _appBarTitles = [
+    'Accueil',
+    'Profil',
+    'Favori',
+  ];
+
+  Color _appBarBackgroundColor = Colors.purple;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Language Learning App'),
+        title: Text(
+          'Language Learning App',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         actions: [
           SizedBox(width: 10),
-          IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          ),
         ],
+        backgroundColor: _appBarBackgroundColor,
       ),
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -90,6 +101,7 @@ class _MainScreenState extends State<MainScreen> {
           print("Tapped on index: $index");
           setState(() {
             _currentIndex = index;
+            _updateAppBarColor();
           });
         },
         items: [
@@ -105,13 +117,39 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.favorite),
             label: 'Favori',
           ),
-          // Add more items as needed
         ],
         selectedItemColor: Colors.purple,
         unselectedItemColor: Colors.grey,
         showSelectedLabels: true,
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
+      ),
+      floatingActionButton: SpeedDial(
+        child: Icon(Icons.chat),
+        backgroundColor: Colors.purple,
+        foregroundColor: Colors.white,
+        overlayColor: Colors.black,
+        overlayOpacity: 0.5,
+        curve: Curves.easeIn,
+        children: [
+          SpeedDialChild(
+            child: Icon(Icons.message),
+            backgroundColor: Colors.green,
+            label: 'Ouvrir le Chatbot',
+            onTap: () {
+              // Ajoutez une animation ici si nécessaire
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChatbotScreen(onClose: () {
+                    // Logique pour fermer le chatbot
+                    print('Fermer le chatbot');
+                  }),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
@@ -140,6 +178,7 @@ class _MainScreenState extends State<MainScreen> {
                 Navigator.pop(context);
                 setState(() {
                   _currentIndex = 0;
+                  _updateAppBarColor(); // Reset color when changing screen
                 });
               },
             ),
@@ -152,6 +191,7 @@ class _MainScreenState extends State<MainScreen> {
                 Navigator.pop(context);
                 setState(() {
                   _currentIndex = 1;
+                  _updateAppBarColor(); // Reset color when changing screen
                 });
               },
             ),
@@ -164,6 +204,7 @@ class _MainScreenState extends State<MainScreen> {
                 Navigator.pop(context);
                 setState(() {
                   _currentIndex = 2;
+                  _updateAppBarColor(); // Reset color when changing screen
                 });
               },
             ),
@@ -171,5 +212,25 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
     );
+  }
+
+  void _updateAppBarColor() {
+    setState(() {
+      // Update color based on _currentIndex
+      switch (_currentIndex) {
+        case 0:
+          _appBarBackgroundColor = Colors.purple;
+          break;
+        case 1:
+          _appBarBackgroundColor = Colors.green;
+          break;
+        case 2:
+          _appBarBackgroundColor = Colors.red;
+          break;
+        // Add more cases as needed
+        default:
+          _appBarBackgroundColor = Colors.purple;
+      }
+    });
   }
 }

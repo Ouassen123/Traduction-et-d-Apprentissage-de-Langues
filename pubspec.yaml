@@ -41,6 +41,8 @@ dependencies:
   syncfusion_flutter_charts: ^24.1.43
   rxdart: ^0.27.3
   flutter_speed_dial: ^7.0.0
+  animated_text_kit: ^4.2.2
+  flare_flutter: ^3.0.2
   
   flutter:
     sdk: flutter
@@ -70,6 +72,9 @@ dev_dependencies:
 flutter:
   assets:
     - assets/LanguageLearning.png
+    - assets/appel_logo.png
+    - assets/android_logo.png
+    - assets/bak.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
